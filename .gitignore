@@ -1,0 +1,11 @@
+# Gradle / Build
+mod/.gradle/
+mod/build/
+mod/run/
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.DS_Store

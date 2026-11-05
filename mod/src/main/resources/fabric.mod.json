@@ -1,0 +1,19 @@
+{
+	"schemaVersion": 1,
+	"id": "bautrupp",
+	"version": "${version}",
+	"name": "Bautrupp",
+	"description": "Aufgaben, Material und Koordinaten für Minecraft-Gruppenprojekte. Nur auf dem Client, synchronisiert über eine eigene Firebase-Datenbank.",
+	"authors": ["Tobias"],
+	"license": "MIT",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["de.bautrupp.BautruppClient"]
+	},
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
