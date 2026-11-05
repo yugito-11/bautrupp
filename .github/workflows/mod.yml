@@ -1,0 +1,71 @@
+# Baut die Mod bei jeder Änderung. Gibt es für die Versionsnummer in mod/gradle.properties
+# noch kein Release, wird es automatisch angelegt (mit der .jar und dem Abschnitt
+# "Neu in <Version>" aus der ANLEITUNG.md als Beschreibung).
+name: Mod bauen und veröffentlichen
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "mod/**"
+      - "ANLEITUNG.md"
+      - ".github/workflows/mod.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Mod bauen
+        working-directory: mod
+        run: |
+          chmod +x gradlew
+          ./gradlew build --no-daemon
+
+      - name: Version lesen
+        id: version
+        run: |
+          v=$(grep '^version=' mod/gradle.properties | cut -d= -f2 | tr -d '[:space:]')
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "jar=mod/build/libs/bautrupp-$v.jar" >> "$GITHUB_OUTPUT"
+          test -f "mod/build/libs/bautrupp-$v.jar"
+
+      - name: Gebaute Mod aufheben
+        uses: actions/upload-artifact@v4
+        with:
+          name: bautrupp-${{ steps.version.outputs.version }}
+          path: ${{ steps.version.outputs.jar }}
+
+      - name: Release anlegen (nur bei neuer Version)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          V: ${{ steps.version.outputs.version }}
+          JAR: ${{ steps.version.outputs.jar }}
+        run: |
+          if gh release view "v$V" >/dev/null 2>&1; then
+            echo "Release v$V gibt es schon – nichts zu tun."
+            exit 0
+          fi
+          short=$(echo "$V" | cut -d. -f1-2)
+          {
+            echo "**Download:** \`bautrupp-$V.jar\` unten bei „Assets“ herunterladen und in Modrinth ins Profil holen"
+            echo "(„Inhalt hinzufügen“ → Datei auswählen). Die alte Bautrupp-Version vorher löschen."
+            echo
+            echo "Für **Minecraft 26.3 mit Fabric**. Anleitung: [ANLEITUNG.md](https://github.com/${GITHUB_REPOSITORY}/blob/main/ANLEITUNG.md)"
+            echo
+            # Abschnitt "### Neu in <Version>" aus der Anleitung (bis zur nächsten Überschrift)
+            awk -v s="### Neu in $short" 'index($0, s) == 1 { on = 1; print; next } on && /^##/ { exit } on { print }' ANLEITUNG.md
+          } > notes.md
+          gh release create "v$V" "$JAR" --title "Bautrupp $short" --notes-file notes.md --target "$GITHUB_SHA"
