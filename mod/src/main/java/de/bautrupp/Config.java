@@ -31,6 +31,8 @@ public class Config {
 	public boolean wegweiser = true;
 	/** Item-Namen: "englisch" (Standard, wie auf der Webseite) oder "spiel" (Sprache des Spiels). */
 	public String itemSprache = "englisch";
+	/** Beim Start nach einer neuen Version auf GitHub sehen und sie herunterladen. */
+	public boolean autoUpdate = true;
 
 	public static Config load() {
 		try {
