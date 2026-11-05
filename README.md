@@ -9,6 +9,11 @@ gemeinsame Firebase Realtime Database teilen:
 | Mod | [`mod/`](mod) | Client-Mod für **Minecraft 26.3 mit Fabric** (nur bei denen nötig, die mitmachen) |
 | Website | [`website/`](website) | Eine einzelne `index.html` – z. B. bei Netlify per Drag & Drop hosten |
 
+## Mod herunterladen
+
+**[bautrupp-2.14.0.jar herunterladen](https://github.com/yugito-11/bautrupp/raw/main/download/bautrupp-2.14.0.jar)**
+(Minecraft 26.3, Fabric). In Modrinth: Profil → „Inhalt hinzufügen“ → Datei auswählen. Ältere Version vorher löschen.
+
 Einrichtung, Bedienung und alle Befehle stehen in der [ANLEITUNG.md](ANLEITUNG.md).
 
 ## Funktionen (Auswahl)
