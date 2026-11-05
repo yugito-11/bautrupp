@@ -517,7 +517,15 @@ public class BautruppScreen extends Screen {
 			rebuildWidgets();
 		}).setTooltip(Tooltip.create(Component.literal("Meldungen über Änderungen der anderen im Chat. Sie sieht nur, wer die Mod hat; an den Server geht nichts.")));
 		boolean english = !"spiel".equals(store.config.itemSprache);
-		button("Item-Namen: " + (english ? "Englisch" : "Spielsprache"), left + panelW / 2 + 8, LIST_TOP + 56, panelW / 2 - 8, b -> {
+		int half = (panelW / 2 - 12) / 2;
+		boolean updates = store.config.autoUpdate;
+		button("Updates: " + (updates ? "An" : "Aus"), left + panelW / 2 + 12 + half, LIST_TOP + 56, panelW - panelW / 2 - 12 - half, b -> {
+			store.config.autoUpdate = !updates;
+			store.config.save();
+			if (!updates) Updater.check(msg -> minecraft.execute(() -> notice(msg)));
+			rebuildWidgets();
+		}).setTooltip(Tooltip.create(Component.literal("Beim Start nach einer neuen Bautrupp-Version sehen und sie herunterladen; aktiv nach dem nächsten Neustart. Deine Version: " + Updater.currentVersion() + ". Von Hand: /bt update")));
+		button("Namen: " + (english ? "Englisch" : "Spiel"), left + panelW / 2 + 8, LIST_TOP + 56, half, b -> {
 			store.config.itemSprache = english ? "spiel" : "englisch";
 			store.config.save();
 			rebuildWidgets();

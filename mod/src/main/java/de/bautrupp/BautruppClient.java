@@ -43,6 +43,7 @@ public class BautruppClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		store = new Store(Config.load());
+		Updater.onStart(store.config);
 
 		KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("bautrupp", "main"));
 		openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.bautrupp.open", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, category));
@@ -58,6 +59,10 @@ public class BautruppClient implements ClientModInitializer {
 				mc.gui.setScreen(new BautruppScreen(store));
 			}
 			store.tick(mc.gui.screen() instanceof BautruppScreen);
+			if (Updater.pendingMessage != null && mc.player != null) {
+				chat(Updater.pendingMessage);
+				Updater.pendingMessage = null;
+			}
 			AreaCounter.tick(mc);
 			StorageWatcher.tick();
 			GoalTracker.tick(mc, store);
@@ -93,6 +98,14 @@ public class BautruppClient implements ClientModInitializer {
 					c.getSource().sendFeedback(prefix().append("Ort gespeichert: " + p.getX() + " " + p.getY() + " " + p.getZ()));
 					return 1;
 				})))
+				.then(literal("update").executes(c -> {
+					c.getSource().sendFeedback(prefix().append("Sehe nach, ob es eine neue Version gibt (du hast " + Updater.currentVersion() + ") ..."));
+					Updater.check(msg -> Minecraft.getInstance().execute(() -> {
+						if (msg.equals(Updater.pendingMessage)) Updater.pendingMessage = null;
+						chat(msg);
+					}));
+					return 1;
+				}))
 				.then(literal("pruefen").executes(c -> {
 					// Für jedes offene Ziel im gewählten Projekt: Stand und ob/warum es gerade zählt
 					int n = 0, hidden = 0;

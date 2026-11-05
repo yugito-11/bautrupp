@@ -11,8 +11,9 @@ gemeinsame Firebase Realtime Database teilen:
 
 ## Mod herunterladen
 
-**[bautrupp-2.14.0.jar herunterladen](https://github.com/yugito-11/bautrupp/raw/main/download/bautrupp-2.14.0.jar)**
-(Minecraft 26.3, Fabric). In Modrinth: Profil → „Inhalt hinzufügen“ → Datei auswählen. Ältere Version vorher löschen.
+**[Neueste Version herunterladen](https://github.com/yugito-11/bautrupp/releases/latest)** (Minecraft 26.3, Fabric) –
+dort unter „Assets“ die `bautrupp-….jar`. In Modrinth: Profil → „Inhalt hinzufügen“ → Datei auswählen.
+Ab Version 2.15 aktualisiert sich die Mod danach selbst.
 
 Einrichtung, Bedienung und alle Befehle stehen in der [ANLEITUNG.md](ANLEITUNG.md).
 
@@ -25,6 +26,7 @@ Einrichtung, Bedienung und alle Befehle stehen in der [ANLEITUNG.md](ANLEITUNG.m
 - Schematic-Import (`.litematic`, `.schem`, `.nbt`) nach Bauteilen, Material oder Ebenen, mit Bauplan-Zählung
 - Projekte mit Spielern und Bereich, Admin-Passwort, Discord-Webhook, Verlauf
 - Anzeige der eigenen Aufgaben am Bildschirmrand mit Wegweiser
+- Automatische Updates der Mod über GitHub-Releases
 
 ## Mod bauen
 
@@ -36,6 +38,9 @@ cd mod
 ```
 
 Die fertige Datei liegt danach in `mod/build/libs/bautrupp-<version>.jar`.
+
+**Neue Version veröffentlichen:** `version=` in `mod/gradle.properties` erhöhen, in der `ANLEITUNG.md` einen
+Abschnitt `### Neu in <x.y>` schreiben und hochladen. Die GitHub Action baut die Mod und legt das Release an.
 
 ## Website
 

@@ -8,7 +8,7 @@ Wer die Mod nicht hat, merkt davon nichts.
 
 1. Modrinth App öffnen und euer 26.3-Fabric-Profil auswählen.
 2. Prüfen, ob **Fabric API** installiert ist. Falls nicht: in Modrinth nach „Fabric API“ suchen und installieren.
-3. `bautrupp-2.14.0.jar` ins Profil holen: entweder über „Inhalt hinzufügen“ → Datei auswählen,
+3. `bautrupp-2.15.0.jar` ins Profil holen: entweder über „Inhalt hinzufügen“ → Datei auswählen,
    oder Profil-Ordner öffnen und die Datei in den Ordner `mods` ziehen.
 4. Spiel starten.
 
@@ -288,6 +288,18 @@ Items im Inventar eines Eingetragenen, in einer Lager-Kiste (zählt beim Öffnen
 Blöcke oder ein Teilziel, an dem gearbeitet wird. Dafür muss jemand mit der Mod online sein.
 Gesperrte Aufgaben (Reihenfolge) bleiben offen, bis sie freigeschaltet sind.
 
+### Neu in 2.15: Automatische Updates
+
+Die Mod aktualisiert sich ab jetzt selbst:
+- Beim Start von Minecraft sieht sie auf GitHub nach, ob es eine neuere Version gibt, und lädt sie herunter.
+  Im Chat steht dann „Bautrupp … wurde heruntergeladen. Nach dem nächsten Neustart von Minecraft ist sie aktiv.“
+- Beim **Beenden** von Minecraft wird die alte Datei im `mods`-Ordner durch die neue ersetzt
+  (vorher geht das nicht, weil die Datei benutzt wird). Beim nächsten Start läuft die neue Version.
+- Von Hand nachsehen: `/bt update`. Abschalten: Menü (J) → Einstellungen → „Updates: An/Aus“.
+- Bis zum Tausch liegt die neue Datei als `bautrupp-….jar.neu` im `mods`-Ordner – die ignoriert Minecraft.
+- Falls etwas schiefgeht: im `mods`-Ordner alle `bautrupp-…`-Dateien löschen und die gewünschte Version
+  von https://github.com/yugito-11/bautrupp/releases neu hineinlegen (ältere Versionen gibt es dort auch).
+
 ### Neu in 2.14: Anzeige leichter verschieben
 
 Öffnen: Menü (J) → Einstellungen → **Verschieben**, oder `/bt anzeige bearbeiten`. Dann:
@@ -383,6 +395,7 @@ lieber nicht benutzen, während ihr streamt, da sieht man das Passwort im Chat-F
 | `/bt ort <Name>` | Deine aktuelle Position als Ort speichern |
 | `/bt meine` | Deine offenen Aufgaben im Chat anzeigen |
 | `/bt anzeige links/rechts/aus` | Aufgaben-Anzeige an den linken/rechten Rand setzen oder ausschalten |
+| `/bt update` | Nach einer neuen Bautrupp-Version sehen und sie herunterladen |
 | `/bt pruefen` | Offene Ziele im Projekt: Stand und warum sie (nicht) zählen |
 | `/bt projekt ecke1` / `ecke2` | Bereich des gewählten Projekts mit zwei Ecken festlegen |
 | `/bt projekt bereich aus` | Bereich des Projekts entfernen |
