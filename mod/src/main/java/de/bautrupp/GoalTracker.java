@@ -145,6 +145,10 @@ public class GoalTracker {
 	}
 
 	public static String idOf(ItemStack s) {
-		return BuiltInRegistries.ITEM.getKey(s.getItem()).toString();
+		return idOf(s.getItem());
+	}
+
+	public static String idOf(Item i) {
+		return BuiltInRegistries.ITEM.getKey(i).toString();
 	}
 }

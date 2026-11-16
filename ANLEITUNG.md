@@ -8,7 +8,7 @@ Wer die Mod nicht hat, merkt davon nichts.
 
 1. Modrinth App öffnen und euer 26.3-Fabric-Profil auswählen.
 2. Prüfen, ob **Fabric API** installiert ist. Falls nicht: in Modrinth nach „Fabric API“ suchen und installieren.
-3. `bautrupp-2.15.0.jar` ins Profil holen: entweder über „Inhalt hinzufügen“ → Datei auswählen,
+3. `bautrupp-2.16.0.jar` ins Profil holen: entweder über „Inhalt hinzufügen“ → Datei auswählen,
    oder Profil-Ordner öffnen und die Datei in den Ordner `mods` ziehen.
 4. Spiel starten.
 
@@ -311,6 +311,23 @@ Die Website lässt sich wie eine App installieren – mit eigenem Symbol, ohne A
 
 Updates kommen automatisch beim nächsten Öffnen. Ohne Internet zeigt die App den letzten Stand
 (nur lesen). Mitteilungen bei geschlossener App gibt es nicht – dafür bräuchte es einen eigenen Server.
+
+### Neu in 2.16: Übersichtlicheres Menü (Taste J)
+
+- **Oben:** „Projekt: … ▾“ öffnet eine Liste aller Projekte (mit Stand) und „+ Neues Projekt“.
+- **Aufgaben:** Werkzeugzeile mit **„+ Neue Aufgabe“**, „Zeige: Alle/Meine“ und „Fertige: an/aus“
+  (fertige sind standardmäßig ausgeblendet). Jede Zeile zeigt Titel, einen kleinen Balken, Stand, Leute und
+  Projekt – und **einen** Knopf (Start / Fertig / Öffnen). **Klick auf die Zeile öffnet die Aufgabe.**
+- **Neue Aufgabe** ist ein eigenes Fenster: Was ist zu tun? → Ziel (Kein Ziel, Sammeln, Abbauen, Platzieren,
+  Samm.+Bau) → Anzahl und Item (mit Vorschlägen zum Anklicken, „Hand“ übernimmt das Item in der Hand) →
+  Ort (hier oder keiner) und für wen (mich oder noch niemand).
+- **Aufgabe geöffnet:** oben Status (Offen / In Arbeit / Fertig), Leute (Admin: einteilen, sonst Mitmachen/
+  Austragen) und Löschen (zweimal klicken). Darunter vier Seiten: **Übersicht** (Ziele, Stand, Zählung),
+  **Schritte**, **Kommentare**, **Einstellungen** (Reihenfolge, weiteres Ziel, Bereich, Zählen, Lager).
+- **Material:** „+ Material“ öffnet ein kleines Fenster; Suche und Sortierung in einer Zeile.
+- **Einstellungen** in Abschnitten (Verbindung, Anzeige im Spiel, Chat/Namen/Updates, Admin); passt nicht
+  alles auf den Bildschirm, mit dem Mausrad scrollen.
+- Das Menü passt sich der Fenstergröße an – vorher rutschten bei kleinen Fenstern Knöpfe übereinander.
 
 ### Neu in 2.15: Automatische Updates
 

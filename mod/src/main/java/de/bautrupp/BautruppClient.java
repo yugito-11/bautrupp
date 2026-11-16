@@ -44,11 +44,13 @@ public class BautruppClient implements ClientModInitializer {
 	public void onInitializeClient() {
 		store = new Store(Config.load());
 		Updater.onStart(store.config);
+		Vorschau.init();
 
 		KeyMapping.Category category = KeyMapping.Category.register(Identifier.fromNamespaceAndPath("bautrupp", "main"));
 		openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.bautrupp.open", InputConstants.Type.KEYBOARD, InputConstants.KEY_J, category));
 
 		ClientTickEvents.END_CLIENT_TICK.register(mc -> {
+			Vorschau.tick(mc, store);
 			while (openKey.consumeClick()) openNextTick = true;
 			if (openHudEditor && mc.gui.screen() == null) {
 				openHudEditor = false;
@@ -305,8 +307,12 @@ public class BautruppClient implements ClientModInitializer {
 	}
 
 	public static String goalProblem(String art, ItemStack item) {
-		if ("abbauen".equals(art) && Block.byItem(item.getItem()) == Blocks.AIR) return "Das ist kein Block, den man abbauen kann.";
-		if (("platzieren".equals(art) || "kombi".equals(art)) && !(item.getItem() instanceof BlockItem)) return "Das ist kein Block, den man platzieren kann.";
+		return goalProblem(art, item.getItem());
+	}
+
+	public static String goalProblem(String art, net.minecraft.world.item.Item item) {
+		if ("abbauen".equals(art) && Block.byItem(item) == Blocks.AIR) return "Das ist kein Block, den man abbauen kann.";
+		if (("platzieren".equals(art) || "kombi".equals(art)) && !(item instanceof BlockItem)) return "Das ist kein Block, den man platzieren kann.";
 		return null;
 	}
 
