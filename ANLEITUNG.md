@@ -288,6 +288,16 @@ Items im Inventar eines Eingetragenen, in einer Lager-Kiste (zählt beim Öffnen
 Blöcke oder ein Teilziel, an dem gearbeitet wird. Dafür muss jemand mit der Mod online sein.
 Gesperrte Aufgaben (Reihenfolge) bleiben offen, bis sie freigeschaltet sind.
 
+### Bautrupp als App am Handy
+
+Die Website lässt sich wie eine App installieren – mit eigenem Symbol, ohne Adressleiste:
+- **Android (Chrome):** bautrupp.netlify.app öffnen → Menü ⋮ → **„App installieren“**
+  (oder in der Website: Einstellungen → „Als App installieren“).
+- **iPhone (Safari):** bautrupp.netlify.app öffnen → **Teilen** → **„Zum Home-Bildschirm“**.
+
+Updates kommen automatisch beim nächsten Öffnen. Ohne Internet zeigt die App den letzten Stand
+(nur lesen). Mitteilungen bei geschlossener App gibt es nicht – dafür bräuchte es einen eigenen Server.
+
 ### Neu in 2.15: Automatische Updates
 
 Die Mod aktualisiert sich ab jetzt selbst:
