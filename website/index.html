@@ -141,7 +141,7 @@ body { margin: 0; }
 .comment p { margin: 0; overflow-wrap: anywhere; }
 .inline { display: flex; gap: 6px; }
 .inline input { flex: 1; min-width: 0; }
-.lager { margin-top: 22px; }
+.lagerbox h2 { margin-bottom: 8px; }
 .people { gap: 6px; }
 .card.locked { opacity: .6; }
 .kids { gap: 6px; border-top: 1px dashed var(--line); padding-top: 6px; }
@@ -175,21 +175,124 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
 .events legend { font-size: 12px; color: var(--muted); padding: 0 4px; }
 .events label { display: flex; gap: 8px; align-items: center; font-size: 14px; flex-direction: row; color: var(--fg); }
 .events .dot { width: 10px; height: 10px; flex: none; background: var(--c); }
-.lager h2 { margin-bottom: 8px; }
 .tag { font-size: 11px; padding: 0 5px; border: 1px solid var(--grass); color: var(--grass); margin-left: 6px; white-space: nowrap; }
 .log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; background: var(--panel); border: 2px solid var(--line); }
 .log li { display: flex; gap: 10px; align-items: flex-start; padding: 9px 12px; border-bottom: 1px solid var(--line); }
 .log li:last-child { border-bottom: 0; }
 .log .txt { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .log time { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+/* ---------- Layout 2: Projekt-Menü, kompakte Karten, Detail-Fenster, Handy-Navigation ---------- */
+.titlebox { flex-direction: row; align-items: center; gap: 12px; }
+.logo { width: 40px; height: 40px; image-rendering: pixelated; flex: none; }
+#projSel { font: 700 16px var(--body); padding: 8px 10px; max-width: 100%; }
+.menuwrap { position: relative; }
+.menubtn { padding: 8px 12px; font-size: 14px; }
+.menu { position: absolute; z-index: 30; top: calc(100% + 4px); left: 0; width: min(300px, calc(100vw - 32px)); background: var(--panel); border: 2px solid var(--line); box-shadow: 0 8px 24px rgba(0,0,0,.25); padding: 8px; display: flex; flex-direction: column; gap: 2px; }
+.menu[hidden] { display: none; }
+#projMenu { left: auto; right: 0; }
+.menu > button { text-align: left; background: none; border: 0; padding: 9px 10px; cursor: pointer; color: var(--fg); }
+.menu > button:hover { background: var(--soft); }
+.menu > button.danger { color: var(--red); }
+.menu form { margin-bottom: 4px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.menu form .btn { padding: 6px 10px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 14px; }
+.toolbar input[type=search] { flex: 1 1 200px; max-width: 320px; }
+.newtask { flex-direction: column; align-items: stretch; max-width: 760px; }
+.newtask h2 { margin-bottom: 2px; }
+.newtask .xyz { flex-wrap: wrap; }
+.more-opts summary { cursor: pointer; font-size: 13px; color: var(--muted); padding: 4px 0; }
+.more-opts .acts { margin-top: 6px; align-items: end; }
+.seg { display: none; }
+.board.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.card { cursor: pointer; gap: 7px; }
+.card:hover { border-color: var(--muted); }
+.card.open { border-color: var(--grass); }
+.card .bar { display: flex; flex-direction: column; gap: 3px; }
+.card .bar .meta { justify-content: space-between; font-variant-numeric: tabular-nums; }
+.card .foot { display: flex; align-items: center; gap: 6px; justify-content: space-between; flex-wrap: wrap; }
+.avatars { display: flex; gap: 3px; align-items: center; }
+.card .next { font-size: 13px; color: var(--fg); }
+.scrim { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 40; }
+.drawer { position: fixed; z-index: 41; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: var(--bg); border-left: 2px solid var(--line); overflow-y: auto; overscroll-behavior: contain; padding: 0 18px calc(24px + env(safe-area-inset-bottom)); }
+.drawer[hidden], .scrim[hidden] { display: none; }
+#drawerBody { display: flex; flex-direction: column; gap: 12px; }
+.dhead { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; position: sticky; top: 0; background: var(--bg); padding: calc(14px + env(safe-area-inset-top)) 0 8px; z-index: 1; border-bottom: 1px solid var(--line); }
+.dhead h2 { font-size: 20px; overflow-wrap: anywhere; }
+.dhead .ghost { font-size: 16px; padding: 4px 10px; }
+.dsec { background: var(--panel); border: 1px solid var(--line); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+.dsec h3 { font: 700 13px var(--display); margin: 0; }
+.dsec.details { border-top: 1px solid var(--line); padding-top: 12px; }
+.statusbtns { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); }
+.statusbtns button { background: var(--panel); border: 0; border-right: 1px solid var(--line); padding: 10px 6px; cursor: pointer; color: var(--muted); font-weight: 700; }
+.statusbtns button:last-child { border-right: 0; }
+.statusbtns button[aria-pressed="true"] { background: var(--grass); color: var(--grass-ink); opacity: 1; }
+.statusbtns button:disabled:not([aria-pressed="true"]) { opacity: .45; cursor: not-allowed; }
+.dfoot { justify-content: flex-end; }
+.settings { border-top: 1px dashed var(--line); padding-top: 8px; }
+.settings summary { cursor: pointer; font: 700 13px var(--display); padding: 4px 0; }
+.settings-in { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+body.noscroll { overflow: hidden; }
+nav .more { display: none; }
+.moremenu { position: fixed; left: auto; top: auto; width: 200px; }
+
+@media (max-width: 700px) {
+  .wrap { padding-top: 12px; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  header { gap: 10px; margin-bottom: 12px; }
+  h1 { font-size: 22px; }
+  #groupTitle { font-size: 22px; }
+  .logo { width: 34px; height: 34px; }
+  .xp { flex: 1 1 100%; min-width: 0; }
+  .projbar { margin-bottom: 10px; }
+  #projSel { flex: 1 1 auto; min-width: 0; }
+  nav { position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; margin: 0; border: 0; border-top: 2px solid var(--line); background: var(--panel); padding: 0 0 env(safe-area-inset-bottom); gap: 0; overflow: visible; }
+  nav button { flex: 1 1 0; font-size: 13px; padding: 9px 2px 11px; border-bottom: 0; border-top: 3px solid transparent; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+  nav button[aria-selected="true"], nav .more.on { border-top-color: var(--grass); color: var(--fg); }
+  nav button .n { margin: 0; font-size: 11px; min-height: 1em; }
+  nav button.extra { display: none; }
+  nav .more { display: flex; font: 500 13px var(--display); background: none; border: 0; color: var(--muted); cursor: pointer; justify-content: center; }
+  .moremenu { right: 8px; bottom: calc(66px + env(safe-area-inset-bottom)); }
+  .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); margin-bottom: 10px; }
+  .seg button { background: var(--panel); border: 0; border-right: 1px solid var(--line); padding: 10px 4px; font-weight: 700; color: var(--muted); cursor: pointer; }
+  .seg button:last-child { border-right: 0; }
+  .seg button .n { font-family: var(--mono); font-size: 12px; font-weight: 400; }
+  .seg button[aria-selected="true"] { background: var(--soft); color: var(--fg); box-shadow: inset 0 -3px 0 var(--grass); }
+  .board, .board.two { grid-template-columns: 1fr; }
+  .board .col { display: none; background: none; padding: 0; }
+  .board .col.show, .board.searching .col { display: flex; }
+  .board .col-h { display: none; }
+  .board.searching .col-h { display: flex; }
+  .toolbar { gap: 8px 12px; margin-bottom: 10px; }
+  .toolbar input[type=search] { max-width: none; order: 3; flex-basis: 100%; }
+  .toolbar .desk { display: none; }
+  .xp { flex-direction: row; flex-wrap: wrap; gap: 2px 18px; }
+  .xp .xpbar { display: none; }
+  .xp-row { gap: 8px; }
+  .drawer { width: 100%; border-left: 0; padding: 0 14px calc(24px + env(safe-area-inset-bottom)); }
+  #toast { bottom: calc(80px + env(safe-area-inset-bottom)); }
+  .tablewrap table, .tablewrap tbody, .tablewrap tr, .tablewrap td { display: block; width: 100%; }
+  .tablewrap thead { display: none; }
+  .tablewrap tr { border-bottom: 2px solid var(--line); padding: 8px 0; }
+  .tablewrap td { border: 0; padding: 3px 10px; }
+  .tablewrap td:empty { display: none; }
+  #matBody tr { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 0; }
+  #matBody td:first-child, #matBody td:nth-child(4), #matBody td:nth-child(5) { grid-column: 1 / -1; }
+  #matBody td:nth-child(2)::before { content: "Benötigt "; font-family: var(--body); color: var(--muted); font-size: 12px; }
+  #matBody td:nth-child(3)::before { content: "Da "; font-family: var(--body); color: var(--muted); font-size: 12px; }
+  #matBody td.num .hint { display: inline; margin-left: 6px; }
+  #matBody td .prog { margin-top: 4px; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header>
     <div class="titlebox">
-      <span class="eyebrow"><span class="live" id="live" title="Verbindung"></span> <span id="liveText">Nicht verbunden</span></span>
-      <h1 id="groupTitle">Bautrupp</h1>
+      <img class="logo" src="icon-192.png" alt="" width="40" height="40">
+      <div>
+        <span class="eyebrow"><span class="live" id="live" title="Verbindung"></span> <span id="liveText">Nicht verbunden</span></span>
+        <h1 id="groupTitle">Bautrupp</h1>
+      </div>
     </div>
     <div class="xp" aria-label="Fortschritt">
       <div class="xp-row"><span>Aufgaben erledigt</span><b id="xpText">0 / 0</b></div>
@@ -214,21 +317,28 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
     <form class="addform setupform" id="fJoin">
       <h2>Wer bist du?</h2>
       <p class="note">Gib deinen Minecraft-Namen ein, genau so wie im Spiel. Damit kannst du dich für Aufgaben eintragen und tauchst im Team auf.</p>
-      <label class="full">Dein Minecraft-Name<input id="jName" required placeholder="z. B. Steve_2011" maxlength="16" autocomplete="off" pattern="[A-Za-z0-9_]{3,16}" title="3 bis 16 Zeichen: Buchstaben, Zahlen und _"></label>
+      <label class="full">Dein Minecraft-Name<input id="jName" required placeholder="z. B. Steve_2011" maxlength="16" autocomplete="username" pattern="[A-Za-z0-9_]{3,16}" title="3 bis 16 Zeichen: Buchstaben, Zahlen und _"></label>
       <div class="known" id="jKnown" hidden><span class="hint">Schon im Team:</span><div class="chips" id="jChips"></div></div>
-      <button class="btn">Los geht's</button>
+      <label class="full" id="jPwLabel"><span id="jPwText">Passwort</span><input id="jPw" type="password" required minlength="4" autocomplete="current-password"></label>
+      <label class="full" id="jPw2Label" hidden>Passwort wiederholen<input id="jPw2" type="password" autocomplete="new-password"></label>
+      <p class="note" id="jPwHint"></p>
+      <button class="btn" id="jGo">Los geht's</button>
     </form>
   </section>
 
   <div id="app" hidden>
   <div class="projbar">
-    <label for="projSel" class="eyebrow">Projekt</label>
     <select id="projSel" aria-label="Projekt wählen"></select>
-    <form class="inline" id="fProj"><input id="projNew" placeholder="Neues Projekt, z. B. Rathaus" maxlength="40" aria-label="Name für neues Projekt"><button class="ghost">Anlegen</button></form>
-    <button class="ghost danger" type="button" id="projDel" hidden>Projekt löschen</button>
+    <div class="menuwrap">
+      <button class="ghost menubtn" type="button" id="projMenuBtn" aria-expanded="false" aria-controls="projMenu">Projekt ▾</button>
+      <div class="menu" id="projMenu" hidden>
+        <form class="inline" id="fProj"><input id="projNew" placeholder="Neues Projekt, z. B. Rathaus" maxlength="40" aria-label="Name für neues Projekt"><button class="btn">Anlegen</button></form>
+        <button type="button" id="schemBtn" title="Litematica (.litematic), WorldEdit (.schem) oder Strukturblock (.nbt)">Schematic importieren …</button>
+        <button type="button" id="projAreaBtn" hidden></button>
+        <button type="button" class="danger" id="projDel" hidden>Projekt löschen</button>
+      </div>
+    </div>
     <span class="acts people" id="projWho" hidden></span>
-    <button class="ghost" type="button" id="projAreaBtn" hidden></button>
-    <button class="ghost" type="button" id="schemBtn" title="Litematica (.litematic), WorldEdit (.schem) oder Strukturblock (.nbt)">Schematic importieren</button>
   </div>
   <form class="addform setupform" id="projArea" hidden>
     <h2>Bereich vom Projekt</h2>
@@ -263,26 +373,49 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
   <nav role="tablist">
     <button role="tab" data-tab="aufgaben">Aufgaben<span class="n" id="nA"></span></button>
     <button role="tab" data-tab="material">Material<span class="n" id="nM"></span></button>
-    <button role="tab" data-tab="orte">Koordinaten<span class="n" id="nO"></span></button>
-    <button role="tab" data-tab="team">Team<span class="n" id="nT"></span></button>
-    <button role="tab" data-tab="verlauf">Verlauf</button>
-    <button role="tab" data-tab="einstellungen">Einstellungen</button>
+    <button role="tab" data-tab="lager">Lager<span class="n" id="nL"></span></button>
+    <button role="tab" data-tab="orte">Orte<span class="n" id="nO"></span></button>
+    <button role="tab" data-tab="team" class="extra">Team<span class="n" id="nT"></span></button>
+    <button role="tab" data-tab="verlauf" class="extra">Verlauf</button>
+    <button role="tab" data-tab="einstellungen" class="extra">Einstellungen</button>
+    <button type="button" class="more" id="moreBtn" aria-expanded="false">Mehr</button>
   </nav>
+  <div class="menu moremenu" id="moreMenu" hidden>
+    <button type="button" data-goto="team">Team</button>
+    <button type="button" data-goto="verlauf">Verlauf</button>
+    <button type="button" data-goto="einstellungen">Einstellungen</button>
+  </div>
 
   <section id="tab-aufgaben">
-    <form class="addform" id="fTask">
-      <label class="grow">Aufgabe<input id="tTitle" placeholder="z. B. Dach vom Rathaus aus Spruce Stairs" maxlength="120"></label>
+    <div class="toolbar">
+      <button class="btn" type="button" id="newTaskBtn">+ Neue Aufgabe</button>
+      <input type="search" id="taskSearch" placeholder="Aufgaben suchen …" aria-label="Aufgaben suchen" autocomplete="off">
+      <label class="check"><input type="checkbox" id="fMine"> Nur meine</label>
+      <label class="check desk"><input type="checkbox" id="fHideDone"> Fertige ausblenden</label>
+    </div>
+    <form class="addform newtask" id="fTask" hidden>
+      <h2>Neue Aufgabe</h2>
+      <label class="grow">Was ist zu tun?<input id="tTitle" placeholder="z. B. Dach vom Rathaus aus Spruce Stairs" maxlength="120"></label>
       <label>Wer?<select id="tWho"></select></label>
-      <label>Koordinaten (optional)<span class="xyz"><input id="tX" placeholder="X" inputmode="numeric"><input id="tY" placeholder="Y" inputmode="numeric"><input id="tZ" placeholder="Z" inputmode="numeric"></span></label>
-      <label title="Sammeln: so viele dabeihaben. Abbauen/Platzieren: Mit Koordinaten zählen nur Blöcke im Umkreis von 32 Blöcken, sonst alle. Item tippen und einen Vorschlag wählen, z. B. Erde, Eichenstamm, Stein">Ziel (optional)<span class="xyz"><select id="tArt" aria-label="Art des Ziels"><option value="sammeln">Sammeln</option><option value="abbauen">Abbauen</option><option value="platzieren">Platzieren</option><option value="kombi">Sammeln + Platzieren</option></select><input id="tGoal" placeholder="Anzahl" inputmode="numeric" style="width:80px"><input id="tItem" placeholder="z. B. Dirt" style="width:150px" list="itemList" autocomplete="off"></span></label>
-      <label>Dimension<select id="tDim"><option value="">–</option><option value="overworld">Oberwelt</option><option value="nether">Nether</option><option value="end">End</option></select></label>
-      <button class="btn">Aufgabe anlegen</button>
+      <label class="goal-in">Ziel (optional)<span class="xyz"><select id="tArt" aria-label="Art des Ziels"><option value="sammeln">Sammeln</option><option value="abbauen">Abbauen</option><option value="platzieren">Platzieren</option><option value="kombi">Sammeln + Platzieren</option></select><input id="tGoal" placeholder="Anzahl" inputmode="numeric" style="width:80px"><input id="tItem" placeholder="z. B. Dirt" style="width:150px" list="itemList" autocomplete="off"></span></label>
+      <details class="more-opts"><summary>Mehr Optionen: Koordinaten, Dimension</summary>
+        <div class="acts">
+          <label>Koordinaten<span class="xyz"><input id="tX" placeholder="X" inputmode="numeric"><input id="tY" placeholder="Y" inputmode="numeric"><input id="tZ" placeholder="Z" inputmode="numeric"></span></label>
+          <label>Dimension<select id="tDim"><option value="">–</option><option value="overworld">Oberwelt</option><option value="nether">Nether</option><option value="end">End</option></select></label>
+        </div>
+        <p class="hint">Mit Koordinaten zählen Abbauen/Platzieren nur im Umkreis von 32 Blöcken.</p>
+      </details>
+      <div class="acts"><button class="btn">Aufgabe anlegen</button><button class="ghost" type="button" id="newTaskClose">Abbrechen</button></div>
     </form>
+    <div class="seg" id="statusSeg" role="tablist" aria-label="Status"></div>
     <div class="board" id="board"></div>
   </section>
 
   <section id="tab-material" hidden>
-    <form class="addform" id="fMat">
+    <div class="toolbar">
+      <button class="btn" type="button" id="newMatBtn">+ Material eintragen</button>
+    </div>
+    <form class="addform" id="fMat" hidden>
       <label class="grow" title="Tippen und einen Vorschlag wählen (deutsch oder englisch). Erkannte Items zählt die Lager-Kiste automatisch mit.">Item<input id="mItem" required placeholder="z. B. Block of Diamond" maxlength="60" list="itemList" autocomplete="off"></label>
       <label>Benötigt (Stück)<input id="mNeed" required inputmode="numeric" placeholder="1728" style="width:110px"></label>
       <button class="btn">Zur Liste</button>
@@ -295,7 +428,10 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
       <tbody id="matBody"></tbody>
     </table></div>
     <p class="note">Material kommt automatisch aus allen Aufgaben mit Ziel (Sammeln, Platzieren, Kombi); ein Klick auf die Aufgabe springt dorthin. „Da“ = in den Lager-Kisten plus schon verbaut. Was noch fehlt, steht auch direkt bei den Zielen in den Aufgaben. Mengen in Stück, daneben in Stacks (64) und Shulker-Kisten (1.728).</p>
-    <div class="lager">
+  </section>
+
+  <section id="tab-lager" hidden>
+    <div class="lagerbox">
       <h2>Lager-Kisten</h2>
       <div class="inline search"><input id="lagerSearch" placeholder="Wo liegt …? z. B. Block of Diamond" list="itemList" autocomplete="off" aria-label="Item in den Lager-Kisten suchen"><span class="hint" id="lagerFound"></span></div>
       <div class="tablewrap"><table>
@@ -354,9 +490,14 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
     </div>
     <form class="addform setupform" id="fMe">
       <h2>Du</h2>
-      <label class="full">Dein Minecraft-Name<input id="meName" required maxlength="16" autocomplete="off"></label>
+      <p class="note">Angemeldet als <b id="meName"></b>.</p>
       <label class="full">Item-Namen<select id="meLang"><option value="en">Englisch (wie im Spiel auf Englisch)</option><option value="de">Deutsch</option></select></label>
-      <div class="acts"><button class="btn">Speichern</button></div>
+      <h2>Dein Passwort ändern</h2>
+      <label class="full">Jetziges Passwort<input id="mePwOld" type="password" autocomplete="current-password"></label>
+      <label class="full">Neues Passwort<input id="mePwNew" type="password" minlength="4" autocomplete="new-password"></label>
+      <label class="full">Neues Passwort wiederholen<input id="mePwNew2" type="password" autocomplete="new-password"></label>
+      <div class="acts"><button class="btn">Passwort ändern</button><button class="ghost" type="button" id="meLogout">Abmelden</button></div>
+      <p class="note">Abmelden, wenn das nicht dein Handy oder PC ist oder du als jemand anderes weitermachen willst.</p>
     </form>
     <form class="addform setupform" id="fDiscord">
       <h2>Discord</h2>
@@ -384,6 +525,8 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
   </section>
   </div>
 </div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-label="Aufgabe"><div id="drawerBody"></div></aside>
 <div id="toast" hidden role="status"></div>
 <datalist id="itemList"></datalist>
 
@@ -430,7 +573,7 @@ function setLive(state, text) { $("live").className = "live " + state; $("liveTe
 function loadCfg() {
   const q = new URLSearchParams(location.search);
   try { cfg = JSON.parse(localStorage.getItem("bautrupp") || "{}"); } catch {}
-  cfg = { db: cfg.db || "", group: cfg.group || "", me: cfg.me || "", adminHash: cfg.adminHash || "", projekt: cfg.projekt || "", sprache: cfg.sprache === "de" ? "de" : "en" };
+  cfg = { db: cfg.db || "", group: cfg.group || "", me: cfg.me || "", pwHash: cfg.pwHash || "", adminHash: cfg.adminHash || "", projekt: cfg.projekt || "", sprache: cfg.sprache === "de" ? "de" : "en" };
   if (q.get("db") && q.get("gruppe")) {
     cfg.db = normUrl(q.get("db")); cfg.group = normGroup(q.get("gruppe"));
     saveCfg();
@@ -453,7 +596,7 @@ function connect() {
   setLive("wait", "Verbinde ...");
   // Letzten Stand sofort zeigen (auch ohne Netz); die Datenbank löst ihn gleich ab
   const saved = loadOffline();
-  if (saved) { tree = saved; taskCache = null; render(); }
+  if (saved) { tree = saved; taskCache = null; haveData = true; render(); showJoinOrApp(); }
   // Firebase schickt bei jeder Änderung sofort ein Ereignis (Server-Sent Events).
   source = new EventSource(base() + ".json");
   source.addEventListener("put", e => { const m = JSON.parse(e.data); setAt(m.path, m.data, false); live(); });
@@ -465,7 +608,7 @@ function connect() {
     if (!navigator.onLine && Object.keys(tree).length) banner("Offline: Du siehst den letzten gespeicherten Stand. Ändern geht erst wieder mit Internet.");
   };
 }
-function live() { setLive("on", "Live verbunden"); banner(""); render(); saveOffline(); }
+function live() { haveData = true; setLive("on", "Live verbunden"); banner(""); render(); showJoinOrApp(); saveOffline(); }
 // Letzter Stand der Gruppe im Browser, damit die App auch offline etwas zeigt
 const offlineKey = () => "bautrupp-stand:" + cfg.db + "|" + cfg.group;
 function loadOffline() {
@@ -481,10 +624,38 @@ function saveOffline() {
   }, 2000);
 }
 // Erst den Minecraft-Namen, dann die Aufgaben.
+// Angemeldet ist, wer seinen Namen und das passende Passwort hat. Solange noch keine Daten da sind,
+// gilt die gespeicherte Anmeldung (sonst blitzt beim Start kurz die Anmeldung auf).
+let haveData = false;
+const playerKey = name => Object.keys(tree.spieler || {}).find(n => same(n, name)) || "";
+const playerPw = name => { const sp = (tree.spieler || {})[playerKey(name)]; return sp && sp.pw && sp.pw.hash ? sp.pw : null; };
+function signedIn() {
+  if (!me() || !cfg.pwHash) return false;
+  if (!haveData) return true;
+  const pw = playerPw(me());
+  return !!pw && pw.hash === cfg.pwHash;
+}
 function showJoinOrApp() {
-  const ready = !!(cfg.db && cfg.group);
-  $("join").hidden = !ready || !!me();
-  $("app").hidden = !ready || !me();
+  const ready = !!(cfg.db && cfg.group), ok = ready && signedIn();
+  const wasJoin = !$("join").hidden;
+  $("join").hidden = !ready || ok;
+  $("app").hidden = !ok;
+  if (ready && !ok) {
+    if (!wasJoin && me() && !$("jName").value) $("jName").value = me();
+    joinMode();
+  }
+}
+// Anmelde-Seite: bekannter Name mit Passwort = Passwort eingeben, sonst Passwort festlegen
+function joinMode() {
+  const name = $("jName").value.trim(), pw = name ? playerPw(name) : null, known = !!playerKey(name);
+  const create = !!name && !pw;
+  $("jPw2Label").hidden = !create;
+  $("jPwText").textContent = create ? "Passwort festlegen (mindestens 4 Zeichen)" : "Passwort";
+  $("jPw").autocomplete = create ? "new-password" : "current-password";
+  $("jPwHint").textContent = !name ? "" : pw ? `Willkommen zurück, ${playerKey(name)}! Gib dein Passwort ein.`
+    : known ? `${playerKey(name)} hat noch kein Passwort für die Webseite. Leg jetzt eins fest – danach kann sich niemand sonst als ${playerKey(name)} anmelden.`
+    : "Neu hier: Leg ein Passwort fest. Damit kann sich niemand sonst unter deinem Namen anmelden.";
+  $("jGo").textContent = create ? "Passwort festlegen und los" : "Anmelden";
 }
 function banner(text) { $("banner").hidden = !text; $("banner").textContent = text; }
 
@@ -758,10 +929,10 @@ function areaText(t) {
   return "";
 }
 function bestandText(t) {
-  if (t.bestand == null) return `${t.plan ? "Nach Bauplan" : "Bestand im Bereich"}: noch nicht gezählt. Jemand mit der Mod muss in die Nähe.`;
+  if (t.bestand == null) return `${t.plan ? "Nach Bauplan" : "Im Bereich"}: noch nicht gezählt. Jemand mit der Mod muss in die Nähe.`;
   if (t.plan) return `Nach Bauplan: ${fmt(t.bestand)} richtig gesetzt · gezählt ${ago(t.bestandZeit || 0)} von ${esc(t.bestandVon || "?")}`;
   const start = t.art === "abbauen" && t.bestandStart != null ? `am Anfang ${fmt(t.bestandStart)}, jetzt ` : "";
-  return `Bestand im Bereich: ${start}${fmt(t.bestand)} · gezählt ${ago(t.bestandZeit || 0)} von ${esc(t.bestandVon || "?")}`;
+  return `Im Bereich: ${start}${fmt(t.bestand)} · gezählt ${ago(t.bestandZeit || 0)} von ${esc(t.bestandVon || "?")}`;
 }
 function bar(label, have, ziel) {
   const pct = Math.min(100, Math.round(have / ziel * 100));
@@ -956,30 +1127,25 @@ function renderAll() {
   const needAll = MR.reduce((a, r) => a + r.need, 0), haveAll = MR.reduce((a, r) => a + Math.min(r.have, r.need), 0);
   $("matText").textContent = needAll ? Math.round(haveAll / needAll * 100) + " %" : "–";
   $("nA").textContent = T.length; $("nM").textContent = MR.length; $("nO").textContent = P.length; $("nT").textContent = PL.length;
+  $("nL").textContent = lagerFor(cfg.projekt).length || "";
   if (document.activeElement !== $("tWho")) $("tWho").innerHTML = playerOptions($("tWho").value);
 
-  $("board").innerHTML = STATUS.map(([k, label], si) => {
-    const col = T.filter(t => (t.status || "offen") === k);
-    const cards = col.map(t => {
-      const xyz = t.x != null ? `<span class="coords">${t.x} / ${t.y ?? "~"} / ${t.z}</span>` : "";
-      const dim = t.dim ? `<span class="dim ${esc(t.dim)}">${DIM_NAME[t.dim] || esc(t.dim)}</span>` : "";
-      const back = si > 0 ? `<button class="ghost" data-act="move" data-id="${t.id}" data-to="${STATUS[si - 1][0]}">← ${STATUS[si - 1][1]}</button>` : "";
-      const isLocked = locked(t);
-      const fwd = si < 2 ? `<button class="ghost" data-act="move" data-id="${t.id}" data-to="${STATUS[si + 1][0]}"${isLocked ? ` disabled title="Gesperrt"` : ""}>${STATUS[si + 1][1]} →</button>` : "";
-      return `<article class="card${isLocked ? " locked" : ""}" id="card-${t.id}">
-        <div class="t">${esc(t.titel)}</div>
-        ${isLocked ? `<div class="hint">🔒 Gesperrt: ${lockText(t)}</div>` : ""}
-        ${xyz || dim ? `<div class="meta">${dim}${xyz}</div>` : ""}
-        ${goalHtml(t)}
-        ${childrenHtml(t)}
-        ${!cfg.projekt && t.projekt && projName(t.projekt) ? `<div class="meta"><span class="chip">${esc(projName(t.projekt))}</span></div>` : ""}
-        ${peopleHtml(t)}
-        <div class="acts">${back}${fwd}${canDelete(t.ersteller) ? `<button class="ghost danger" data-act="delTask" data-id="${t.id}" style="margin-left:auto">Löschen</button>` : ""}</div>
-        ${detailsHtml(t)}
-      </article>`;
-    }).join("");
-    return `<div class="col"><div class="col-h"><h2>${label}</h2><span>${col.length}</span></div>${cards || `<div class="empty">${si === 0 ? "Keine offenen Aufgaben." : "Leer"}</div>`}</div>`;
+  // Aufgaben: Filter (Suche, nur meine, fertige ausblenden), am Handy eine Spalte auf einmal
+  const tq = normName($("taskSearch").value), mine = $("fMine").checked, hideDone = $("fHideDone").checked && !phone.matches;
+  const V = T.filter(t => (!mine || hasPerson(t, me()))
+    && (!tq || [t.titel, nameOf(t), ...childrenOf(t).map(nameOf)].some(n => normName(n || "").includes(tq))));
+  const cols = STATUS.filter(([k]) => !(hideDone && k === "fertig"));
+  if (hideDone && boardCol === "fertig") boardCol = "offen";
+  $("statusSeg").innerHTML = cols.map(([k, label]) => `<button type="button" role="tab" data-col="${k}" aria-selected="${k === boardCol}">${label} <span class="n">${V.filter(t => (t.status || "offen") === k).length}</span></button>`).join("");
+  $("board").classList.toggle("two", cols.length === 2);
+  $("board").classList.toggle("searching", !!tq); // Suche am Handy: Treffer aus allen Spalten zeigen
+  $("statusSeg").hidden = !!tq;
+  $("board").innerHTML = cols.map(([k, label]) => {
+    const col = V.filter(t => (t.status || "offen") === k);
+    const empty = tq || mine ? "Nichts gefunden." : k === "offen" ? "Keine offenen Aufgaben." : k === "arbeit" ? "Gerade arbeitet niemand an etwas." : "Noch nichts fertig.";
+    return `<div class="col${k === boardCol ? " show" : ""}"><div class="col-h"><h2>${label}</h2><span>${col.length}</span></div>${col.map(cardHtml).join("") || `<div class="empty">${empty}</div>`}</div>`;
   }).join("");
+  renderDrawer();
 
   // Material: Suche (Englisch, Deutsch oder ID) und Sortierung
   const mq = normName($("matSearch").value), sortBy = $("matSort").value;
@@ -1042,8 +1208,9 @@ function renderAll() {
     const mine = T.filter(t => hasPerson(t, p));
     const open = mine.filter(t => t.status !== "fertig").length;
     const sp = (tree.spieler || {})[key(p)];
-    const seen = sp && sp.zuletzt ? "mit Mod" : "ohne Mod";
+    const seen = (sp && sp.zuletzt ? "mit Mod" : "ohne Mod") + (sp && sp.pw ? " · Passwort ✓" : "");
     return `<div class="member">${headHtml(p)}<div class="info"><div class="nm">${esc(p)}</div><div class="st">${open} offen · ${mine.length - open} fertig · ${seen}</div></div>
+      ${sp && sp.pw && hasAdmin() && isAdmin() ? `<button class="ghost" data-act="resetPw" data-who="${esc(key(p))}" title="Wenn jemand sein Passwort vergessen hat: danach legt er beim nächsten Öffnen ein neues fest">Passwort zurücksetzen</button>` : ""}
       ${sp && isAdmin() ? `<button class="ghost danger" data-act="del" data-path="/spieler/${esc(key(p))}">Entfernen</button>` : ""}</div>`;
   }).join("") : `<div class="empty">Noch niemand im Team.</div>`;
 }
@@ -1140,11 +1307,11 @@ function goalSettingsHtml(t) {
     ${edit && areaText(t) ? `<button class="ghost" type="button" data-act="clearArea" data-id="${t.id}">Überall zählen</button>` : ""}
     <h3>Zählt</h3>
     ${hasArea(t) ? `<label class="check"><input type="radio" name="modus-${t.id}" data-act="modus" data-id="${t.id}" value="bestand"${bestandMode(t) ? " checked" : ""}${dis}>
-        Bestand im Bereich: was dort steht, egal wer es gesetzt hat</label>
+        Zählt, was im Bereich steht – egal wer es gesetzt hat</label>
       <label class="check"><input type="radio" name="modus-${t.id}" data-act="modus" data-id="${t.id}" value="platzierungen"${bestandMode(t) ? "" : " checked"}${dis}>
-        Platzierungen: was Leute mit der Mod ${t.art === "abbauen" ? "abbauen" : "setzen"}</label>
+        Zählt nur, was Leute mit der Mod ${t.art === "abbauen" ? "abbauen" : "setzen"}</label>
       ${bestandMode(t) && t.art === "abbauen" && edit ? `<button class="ghost" type="button" data-act="resetStart" data-id="${t.id}" title="Bei der nächsten Zählung gilt, was dann im Bereich steht, als Anfang.">Anfang neu zählen</button>` : ""}`
-    : `<span class="hint">Was Leute mit der Mod ${t.art === "abbauen" ? "abbauen" : "setzen"}. Mit einem Bereich kann die Mod stattdessen den Bestand dort zählen.</span>`}`;
+    : `<span class="hint">Was Leute mit der Mod ${t.art === "abbauen" ? "abbauen" : "setzen"}. Mit einem Bereich kann die Mod stattdessen zählen, was dort steht.</span>`}`;
 }
 
 // Teilziele unter dem Hauptziel: je Ziel ein kleiner Balken, löschbar
@@ -1178,6 +1345,69 @@ function orderAndSubHtml(t) {
     </form>`;
 }
 
+// Kompakte Karte: Titel, ein Balken, Leute, ein Knopf für den nächsten Schritt. Alles andere im Detail-Fenster.
+let openTask = null, boardCol = "offen";
+// Am Handy gibt es statt Spalten den Umschalter Offen / In Arbeit / Fertig (dort nichts ausblenden)
+const phone = matchMedia("(max-width: 700px)");
+phone.addEventListener("change", () => render());
+const NEXT = { offen: ["arbeit", "Starten"], arbeit: ["fertig", "Fertig ✓"], fertig: ["offen", "Wieder öffnen"] };
+function summaryHtml(t) {
+  const kids = childrenOf(t), has = t.ziel > 0 && t.item, done = t.status === "fertig";
+  const steps = sorted(t.schritte), stepsDone = steps.filter(x => x.erledigt).length;
+  let label, pct;
+  if (kids.length) { label = `${kids.length + (has ? 1 : 0)} Ziele`; pct = percent(t); }
+  else if (has) {
+    const v = t.art === "kombi" ? progress(t) : goalTotal(t);
+    label = `${fmt(v)} / ${fmt(t.ziel)} ${esc(nameOf(t))}${t.art === "kombi" ? " verbaut" : ""}`; pct = Math.min(100, Math.round(v * 100 / t.ziel));
+  } else if (steps.length) { label = `Schritte ${stepsDone} / ${steps.length}`; pct = Math.round(stepsDone * 100 / steps.length); }
+  else return "";
+  if (done) pct = 100;
+  return `<div class="bar"><div class="meta"><span>${label}</span><span>${pct} %</span></div>
+    <div class="prog"><i class="${pct >= 100 ? "full" : ""}" style="width:${pct}%"></i></div></div>`;
+}
+function cardHtml(t) {
+  const st = t.status || "offen", isLocked = locked(t), P = people(t);
+  const comments = sorted(t.kommentare).length;
+  const info = [
+    !cfg.projekt && t.projekt && projName(t.projekt) ? `<span class="chip">${esc(projName(t.projekt))}</span>` : "",
+    t.dim ? `<span class="dim ${esc(t.dim)}">${DIM_NAME[t.dim] || esc(t.dim)}</span>` : "",
+    comments ? `<span>💬 ${comments}</span>` : ""].filter(Boolean).join("");
+  const [to, label] = NEXT[st] || NEXT.offen;
+  const join = !P.length && me() && st !== "fertig" ? `<button class="ghost" data-act="join" data-id="${t.id}">Übernehmen</button>` : "";
+  return `<article class="card${isLocked ? " locked" : ""}${t.id === openTask ? " open" : ""}" id="card-${t.id}" data-open="${t.id}" tabindex="0">
+    <div class="t">${esc(t.titel)}</div>
+    ${isLocked ? `<div class="hint">🔒 ${lockText(t)}</div>` : ""}
+    ${info ? `<div class="meta">${info}</div>` : ""}
+    ${summaryHtml(t)}
+    <div class="foot"><span class="avatars">${P.slice(0, 4).map(headHtml).join("")}${P.length > 4 ? `<span class="hint">+${P.length - 4}</span>` : ""}${!P.length ? `<span class="hint">Niemand</span>` : ""}</span>
+      <span class="acts">${join}${isLocked && to !== "offen" ? "" : `<button class="ghost next" data-act="move" data-id="${t.id}" data-to="${to}">${label}</button>`}</span></div>
+  </article>`;
+}
+function drawerHtml(t) {
+  const st = t.status || "offen", si = STATUS.findIndex(x => x[0] === st), isLocked = locked(t);
+  const where = t.x != null ? `<span class="coords">${t.x} / ${t.y ?? "~"} / ${t.z}</span> <button class="ghost" data-act="copy" data-text="/tp @s ${t.x} ${t.y ?? "~"} ${t.z}" title="Als /tp-Befehl kopieren">/tp</button>` : "";
+  const meta = [t.projekt && projName(t.projekt) ? `<span class="chip">${esc(projName(t.projekt))}</span>` : "",
+    t.dim ? `<span class="dim ${esc(t.dim)}">${DIM_NAME[t.dim] || esc(t.dim)}</span>` : "", where,
+    t.ersteller ? `<span>angelegt von ${esc(t.ersteller)}</span>` : ""].filter(Boolean).join("");
+  return `<div class="dhead"><h2>${esc(t.titel)}</h2><button class="ghost" data-act="closeDrawer" aria-label="Schließen">✕</button></div>
+    ${meta ? `<div class="meta">${meta}</div>` : ""}
+    ${isLocked ? `<div class="hint">🔒 Gesperrt: ${lockText(t)}</div>` : ""}
+    <div class="statusbtns" role="group" aria-label="Status">${STATUS.map(([k, l], i) => `<button type="button" data-act="move" data-id="${t.id}" data-to="${k}"${i === si ? ` aria-pressed="true" disabled` : ""}${isLocked && i > si ? " disabled" : ""}>${l}</button>`).join("")}</div>
+    <div class="dsec"><h3>Wer macht mit?</h3>${peopleHtml(t)}</div>
+    ${t.ziel > 0 && t.item || childrenOf(t).length ? `<div class="dsec"><h3>Ziele</h3>${goalHtml(t)}${childrenHtml(t)}</div>` : ""}
+    <div class="dsec details">${detailsInner(t)}</div>
+    ${canDelete(t.ersteller) ? `<div class="acts dfoot"><button class="ghost danger" data-act="delTask" data-id="${t.id}">Aufgabe löschen</button></div>` : ""}`;
+}
+function renderDrawer() {
+  const raw = openTask && (tree.aufgaben || {})[openTask], t = raw ? { id: openTask, ...raw } : null;
+  if (!t) openTask = null;
+  $("drawer").hidden = $("scrim").hidden = !t;
+  document.body.classList.toggle("noscroll", !!t);
+  if (t) $("drawerBody").innerHTML = drawerHtml(t);
+}
+function openDrawer(id) { openTask = id; render(); $("drawer").scrollTop = 0; }
+function closeDrawer() { openTask = null; render(); }
+
 function detailsHtml(t) {
   const steps = sorted(t.schritte).sort((a, b) => (a.pos || 0) - (b.pos || 0));
   const comments = sorted(t.kommentare).sort((a, b) => (a.zeit || 0) - (b.zeit || 0));
@@ -1185,9 +1415,13 @@ function detailsHtml(t) {
   const label = `${open ? "▾" : "▸"} Details${steps.length ? ` · ✔ ${done}/${steps.length}` : ""}${comments.length ? ` · ${comments.length} Kommentar${comments.length > 1 ? "e" : ""}` : ""}`;
   if (!open) return `<button class="ghost details-btn" data-act="toggle" data-id="${t.id}">${label}</button>`;
   return `<button class="ghost details-btn" data-act="toggle" data-id="${t.id}">${label}</button>
-    <div class="details">
-      ${goalSettingsHtml(t)}
-      ${orderAndSubHtml(t)}
+    <div class="details">${detailsInner(t)}</div>`;
+}
+function detailsInner(t) {
+  const steps = sorted(t.schritte).sort((a, b) => (a.pos || 0) - (b.pos || 0));
+  const comments = sorted(t.kommentare).sort((a, b) => (a.zeit || 0) - (b.zeit || 0));
+  const settings = `${goalSettingsHtml(t)}${orderAndSubHtml(t)}`;
+  return `
       <h3>Schritte</h3>
       <ul class="steps">${steps.map(x => `<li class="${x.erledigt ? "done" : ""}">
         <input type="checkbox" data-act="step" data-id="${t.id}" data-step="${x.id}"${x.erledigt ? " checked" : ""} aria-label="Abhaken">
@@ -1198,8 +1432,15 @@ function detailsHtml(t) {
       <div class="comments">${comments.map(c => `<div class="comment"><div class="who">${headHtml(c.wer)}<b>${esc(c.wer)}</b> ${ago(c.zeit || 0)}
         ${canDelete(c.wer) ? `<button class="ghost danger" data-act="delComment" data-id="${t.id}" data-comment="${c.id}" title="Kommentar löschen">×</button>` : ""}</div><p>${esc(c.text)}</p></div>`).join("") || `<span class="hint">Noch keine Kommentare.</span>`}</div>
       <form class="inline" data-form="comment" data-id="${t.id}"><input data-draft="comment-${t.id}" placeholder="Kommentar schreiben ..." maxlength="200"><button class="ghost">Senden</button></form>
-    </div>`;
+      <details class="settings" data-keep="settings"${keepOpen.has("settings") ? " open" : ""}><summary>Einstellungen: ${t.ziel > 0 && t.item ? "Bereich, Zählen, " : ""}Reihenfolge, weiteres Ziel</summary>
+        <div class="settings-in">${settings}</div></details>`;
 }
+// Aufgeklappte Bereiche bleiben bei Live-Updates offen
+const keepOpen = new Set();
+document.addEventListener("toggle", e => {
+  const d = e.target; if (!d.dataset || !d.dataset.keep) return;
+  if (d.open) keepOpen.add(d.dataset.keep); else keepOpen.delete(d.dataset.keep);
+}, true);
 
 function renderDiscord() {
   const d = tree.discord || {}, on = validWebhook(d.webhook), admin = isAdmin();
@@ -1224,7 +1465,7 @@ function renderAdmin() {
   $("adminMain").textContent = !hasAdmin() ? "Passwort festlegen" : admin ? "Passwort ändern" : "Als Admin anmelden";
   $("adminLogout").hidden = !admin;
   $("groupTitle").textContent = "Gruppe " + cfg.group + (admin ? " · Admin" : "");
-  if (document.activeElement !== $("meName")) $("meName").value = me();
+  $("meName").textContent = me();
   $("meLang").value = cfg.sprache;
   const known = Object.keys(tree.spieler || {}).sort((a, b) => a.localeCompare(b));
   $("jKnown").hidden = !known.length;
@@ -1235,11 +1476,42 @@ function renderAdmin() {
 
 function showTab(name) {
   if (!$("tab-" + name)) name = "aufgaben";
-  document.querySelectorAll("nav button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  document.querySelectorAll("nav button[data-tab]").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === name));
+  $("moreBtn").classList.toggle("on", ["team", "verlauf", "einstellungen"].includes(name));
+  $("moreMenu").hidden = true;
   document.querySelectorAll("section[id^=tab-]").forEach(s => s.hidden = s.id !== "tab-" + name);
   try { localStorage.setItem("bautrupp-tab", name); } catch {}
 }
-document.querySelectorAll("nav button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+document.querySelectorAll("nav button[data-tab]").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+// Menüs: "Projekt ▾" und am Handy "Mehr"
+function toggleMenu(btn, menu, open = menu.hidden) { menu.hidden = !open; btn.setAttribute("aria-expanded", open); }
+$("projMenuBtn").onclick = () => toggleMenu($("projMenuBtn"), $("projMenu"));
+$("moreBtn").onclick = () => toggleMenu($("moreBtn"), $("moreMenu"));
+$("moreMenu").onclick = e => { const b = e.target.closest("[data-goto]"); if (b) showTab(b.dataset.goto); };
+document.addEventListener("click", e => {
+  if (!e.target.closest(".menuwrap")) toggleMenu($("projMenuBtn"), $("projMenu"), false);
+  else if (e.target.closest("#projMenu > button")) setTimeout(() => toggleMenu($("projMenuBtn"), $("projMenu"), false));
+  if (!e.target.closest("#moreBtn, #moreMenu")) toggleMenu($("moreBtn"), $("moreMenu"), false);
+  // Karte antippen = Details öffnen (nicht bei Knöpfen und Auswahlfeldern darin)
+  const card = e.target.closest("[data-open]");
+  if (card && !e.target.closest("button, select, input, a, label")) openDrawer(card.dataset.open);
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && openTask) closeDrawer();
+  if (e.key === "Enter" && e.target.matches && e.target.matches("[data-open]")) openDrawer(e.target.dataset.open);
+});
+$("scrim").onclick = () => closeDrawer();
+// Neue Aufgabe: Formular auf- und zuklappen
+$("newTaskBtn").onclick = () => { $("fTask").hidden = !$("fTask").hidden; if (!$("fTask").hidden) $("tTitle").focus(); };
+$("newTaskClose").onclick = () => { $("fTask").hidden = true; };
+$("newMatBtn").onclick = () => { $("fMat").hidden = !$("fMat").hidden; if (!$("fMat").hidden) $("mItem").focus(); };
+// Filter merken
+for (const id of ["fMine", "fHideDone"]) {
+  try { $(id).checked = localStorage.getItem("bautrupp-" + id) === "1"; } catch {}
+  $(id).onchange = () => { try { localStorage.setItem("bautrupp-" + id, $(id).checked ? "1" : "0"); } catch {} render(); };
+}
+$("taskSearch").oninput = () => render();
+$("statusSeg").onclick = e => { const b = e.target.closest("[data-col]"); if (b) { boardCol = b.dataset.col; render(); } };
 
 function confirmDel(b, fn) {
   if (b.dataset.armed) { fn(); return; }
@@ -1272,17 +1544,15 @@ document.addEventListener("click", async e => {
     case "clearArea": patchTask(id, { bereich: null, radius: null }); break;
     case "join": { const t = (tree.aufgaben || {})[id] || {}; setPeople(id, [...people(t), me()]); break; }
     case "unassign": { const t = (tree.aufgaben || {})[id] || {}; setPeople(id, people(t).filter(p => !same(p, b.dataset.who))); break; }
+    case "closeDrawer": closeDrawer(); break;
+    case "resetPw": confirmDel(b, async () => {
+      if (await write("PATCH", "/spieler/" + b.dataset.who, { pw: null })) toast(`Passwort von ${b.dataset.who} zurückgesetzt. Beim nächsten Öffnen legt er ein neues fest.`);
+    }); break;
     case "toggle": if (openCards.has(id)) openCards.delete(id); else openCards.add(id); render(); break;
     case "delStep": confirmDel(b, () => write("DELETE", `/aufgaben/${id}/schritte/${b.dataset.step}`)); break;
     case "delComment": confirmDel(b, () => write("DELETE", `/aufgaben/${id}/kommentare/${b.dataset.comment}`)); break;
     case "plus": { const m = (tree.material || {})[id] || {}; setHave(id, (m.have || 0) + 64); break; }
-    case "goTask": {
-      showTab("aufgaben"); openCards.add(id); render();
-      const c = $("card-" + id);
-      if (c) { c.scrollIntoView({ behavior: "smooth", block: "center" }); c.classList.add("flash"); setTimeout(() => c.classList.remove("flash"), 1600); }
-      else toast("Die Aufgabe gehört zu einem anderen Projekt.");
-      break;
-    }
+    case "goTask": showTab("aufgaben"); openDrawer(id); break;
     case "copy": try { await navigator.clipboard.writeText(b.dataset.text); toast("Kopiert: " + b.dataset.text); } catch { toast(b.dataset.text); } break;
   }
 });
@@ -1371,7 +1641,7 @@ $("fProj").onsubmit = async e => {
   const name = $("projNew").value.trim(); if (!name) return;
   const id = newId();
   if (await write("PUT", "/projekte/" + id, { name, ersteller: me(), erstellt: Date.now() })) {
-    $("projNew").value = ""; selectNewProject(id);
+    $("projNew").value = ""; selectNewProject(id); toggleMenu($("projMenuBtn"), $("projMenu"), false);
     render(); openProjectArea();
     log(`hat das Projekt "${name}" angelegt`, "", "projekt");
     toast(`Projekt "${name}" angelegt. Bereich ist optional.`);
@@ -1753,6 +2023,7 @@ $("fTask").onsubmit = async e => {
   const tid = newId();
   if (await write("PUT", "/aufgaben/" + tid, t)) {
     ["tTitle", "tX", "tY", "tZ", "tGoal", "tItem"].forEach(i => $(i).value = ""); toast("Aufgabe angelegt");
+    $("fTask").hidden = true;
     log(`hat die Aufgabe "${t.titel}" angelegt`, tid, "neu", t.projekt);
   }
 };
@@ -1763,7 +2034,7 @@ $("fMat").onsubmit = async e => {
   const itemId = resolveItem(item);
   if (itemId) item = itemEn(itemId);
   if (await write("PUT", "/material/" + newId(), { item, itemId, need, have: 0, ersteller: me(), projekt: cfg.projekt })) {
-    $("mItem").value = ""; $("mNeed").value = "";
+    $("mItem").value = ""; $("mNeed").value = ""; $("fMat").hidden = true;
     toast(itemId ? `Erkannt: ${item}. Das Lager zählt automatisch mit.` : `"${item}" ist kein bekanntes Item, wird von Hand gezählt.`);
   }
 };
@@ -1799,22 +2070,48 @@ $("disconnect").onclick = () => {
 };
 
 // Name merken und im Team eintragen (vorhandene Einträge der Mod bleiben erhalten).
-async function setMe(name) {
+// Anmelden: Passwort prüfen, oder (neuer Name / noch ohne Passwort) eins festlegen.
+// Gespeichert wird nur ein Prüfwert (SHA-256 mit Salz), nie das Passwort selbst.
+const newSalt = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, "0")).join("");
+async function signIn(name, pass, pass2) {
   name = name.trim();
   if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) { toast("Minecraft-Namen haben 3 bis 16 Zeichen: Buchstaben, Zahlen und _."); return false; }
-  const existing = Object.keys(tree.spieler || {}).find(n => same(n, name));
-  cfg.me = existing || name; saveCfg();
-  await write("PATCH", "/spieler/" + key(cfg.me), { web: true });
+  const k = playerKey(name) || name, pw = playerPw(name);
+  if (pw) {
+    const hash = await sha256(pw.salt + ":" + pass);
+    if (hash !== pw.hash) { toast("Falsches Passwort."); return false; }
+    cfg.me = k; cfg.pwHash = hash; saveCfg();
+    await write("PATCH", "/spieler/" + key(k), { web: true });
+  } else {
+    if (pass.length < 4) { toast("Das Passwort muss mindestens 4 Zeichen haben."); return false; }
+    if (pass !== pass2) { toast("Die beiden Passwörter sind nicht gleich."); return false; }
+    const salt = newSalt(), hash = await sha256(salt + ":" + pass);
+    if (!(await write("PATCH", "/spieler/" + key(k), { web: true, pw: { salt, hash } }))) return false;
+    cfg.me = k; cfg.pwHash = hash; saveCfg();
+    setAt("/spieler/" + key(k) + "/pw", { salt, hash }, false);
+  }
+  $("jPw").value = $("jPw2").value = "";
   showJoinOrApp(); render();
   return true;
 }
-$("fJoin").onsubmit = async e => { e.preventDefault(); if (await setMe($("jName").value)) toast("Hallo " + cfg.me + "!"); };
-$("jChips").onclick = e => { const b = e.target.closest("[data-pick]"); if (b) { $("jName").value = b.dataset.pick; $("jName").focus(); } };
+$("fJoin").onsubmit = async e => { e.preventDefault(); if (await signIn($("jName").value, $("jPw").value, $("jPw2").value)) toast("Hallo " + cfg.me + "!"); };
+$("jName").oninput = () => joinMode();
+$("jChips").onclick = e => { const b = e.target.closest("[data-pick]"); if (b) { $("jName").value = b.dataset.pick; joinMode(); $("jPw").focus(); } };
 $("meLang").onchange = () => { cfg.sprache = $("meLang").value; saveCfg(); fillItemList(); render(); };
 $("fMe").onsubmit = async e => {
   e.preventDefault();
-  if (await setMe($("meName").value)) toast("Gespeichert");
+  const pw = playerPw(me()), old = $("mePwOld").value, neu = $("mePwNew").value;
+  if (!pw || (await sha256(pw.salt + ":" + old)) !== pw.hash) { toast("Das jetzige Passwort stimmt nicht."); return; }
+  if (neu.length < 4) { toast("Das neue Passwort muss mindestens 4 Zeichen haben."); return; }
+  if (neu !== $("mePwNew2").value) { toast("Die beiden neuen Passwörter sind nicht gleich."); return; }
+  const salt = newSalt(), hash = await sha256(salt + ":" + neu);
+  if (await write("PATCH", "/spieler/" + key(playerKey(me())), { pw: { salt, hash } })) {
+    cfg.pwHash = hash; saveCfg();
+    ["mePwOld", "mePwNew", "mePwNew2"].forEach(i => $(i).value = "");
+    toast("Passwort geändert");
+  }
 };
+$("meLogout").onclick = () => { $("jName").value = ""; cfg.me = ""; cfg.pwHash = ""; saveCfg(); showJoinOrApp(); window.scrollTo(0, 0); };
 $("fAdmin").onsubmit = async e => {
   e.preventDefault();
   const pw = $("adminPw").value;

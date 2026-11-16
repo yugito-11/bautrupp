@@ -288,6 +288,20 @@ Items im Inventar eines Eingetragenen, in einer Lager-Kiste (zählt beim Öffnen
 Blöcke oder ein Teilziel, an dem gearbeitet wird. Dafür muss jemand mit der Mod online sein.
 Gesperrte Aufgaben (Reihenfolge) bleiben offen, bis sie freigeschaltet sind.
 
+### Passwort für die Webseite
+
+Wer die Webseite öffnet, meldet sich mit seinem Minecraft-Namen **und einem Passwort** an – so kann niemand
+einfach einen fremden Namen auswählen.
+- **Neu:** Namen eintippen, Passwort festlegen (mindestens 4 Zeichen, zweimal eingeben).
+- **Schon im Team, aber noch ohne Passwort** (z. B. bisher nur mit der Mod): beim nächsten Öffnen eins festlegen.
+- **Ändern / Abmelden:** Einstellungen → „Dein Passwort ändern“ bzw. „Abmelden“. Nach einer Änderung muss man
+  sich auf anderen Geräten neu anmelden.
+- **Vergessen?** Der Admin kann es unter Team → „Passwort zurücksetzen“ löschen; danach legt man ein neues fest.
+- In der Mod braucht man kein Passwort – dort ist man über seinen Minecraft-Account angemeldet.
+
+Gespeichert wird nur ein Prüfwert, nicht das Passwort selbst. Es ist ein Schutz gegen Verwechseln und Schummeln
+in der Gruppe, kein Bank-Tresor: Nimm kein Passwort, das du woanders wichtig benutzt.
+
 ### Bautrupp als App am Handy
 
 Die Website lässt sich wie eine App installieren – mit eigenem Symbol, ohne Adressleiste:
