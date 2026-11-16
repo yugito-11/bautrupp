@@ -317,9 +317,12 @@ nav .more { display: none; }
     <form class="addform setupform" id="fJoin">
       <h2>Wer bist du?</h2>
       <p class="note">Gib deinen Minecraft-Namen ein, genau so wie im Spiel. Damit kannst du dich für Aufgaben eintragen und tauchst im Team auf.</p>
-      <label class="full">Dein Minecraft-Name<input id="jName" required placeholder="z. B. Steve_2011" maxlength="16" autocomplete="off" pattern="[A-Za-z0-9_]{3,16}" title="3 bis 16 Zeichen: Buchstaben, Zahlen und _"></label>
+      <label class="full">Dein Minecraft-Name<input id="jName" required placeholder="z. B. Steve_2011" maxlength="16" autocomplete="username" pattern="[A-Za-z0-9_]{3,16}" title="3 bis 16 Zeichen: Buchstaben, Zahlen und _"></label>
       <div class="known" id="jKnown" hidden><span class="hint">Schon im Team:</span><div class="chips" id="jChips"></div></div>
-      <button class="btn">Los geht's</button>
+      <label class="full" id="jPwLabel"><span id="jPwText">Passwort</span><input id="jPw" type="password" required minlength="4" autocomplete="current-password"></label>
+      <label class="full" id="jPw2Label" hidden>Passwort wiederholen<input id="jPw2" type="password" autocomplete="new-password"></label>
+      <p class="note" id="jPwHint"></p>
+      <button class="btn" id="jGo">Los geht's</button>
     </form>
   </section>
 
@@ -487,9 +490,14 @@ nav .more { display: none; }
     </div>
     <form class="addform setupform" id="fMe">
       <h2>Du</h2>
-      <label class="full">Dein Minecraft-Name<input id="meName" required maxlength="16" autocomplete="off"></label>
+      <p class="note">Angemeldet als <b id="meName"></b>.</p>
       <label class="full">Item-Namen<select id="meLang"><option value="en">Englisch (wie im Spiel auf Englisch)</option><option value="de">Deutsch</option></select></label>
-      <div class="acts"><button class="btn">Speichern</button></div>
+      <h2>Dein Passwort ändern</h2>
+      <label class="full">Jetziges Passwort<input id="mePwOld" type="password" autocomplete="current-password"></label>
+      <label class="full">Neues Passwort<input id="mePwNew" type="password" minlength="4" autocomplete="new-password"></label>
+      <label class="full">Neues Passwort wiederholen<input id="mePwNew2" type="password" autocomplete="new-password"></label>
+      <div class="acts"><button class="btn">Passwort ändern</button><button class="ghost" type="button" id="meLogout">Abmelden</button></div>
+      <p class="note">Abmelden, wenn das nicht dein Handy oder PC ist oder du als jemand anderes weitermachen willst.</p>
     </form>
     <form class="addform setupform" id="fDiscord">
       <h2>Discord</h2>
@@ -565,7 +573,7 @@ function setLive(state, text) { $("live").className = "live " + state; $("liveTe
 function loadCfg() {
   const q = new URLSearchParams(location.search);
   try { cfg = JSON.parse(localStorage.getItem("bautrupp") || "{}"); } catch {}
-  cfg = { db: cfg.db || "", group: cfg.group || "", me: cfg.me || "", adminHash: cfg.adminHash || "", projekt: cfg.projekt || "", sprache: cfg.sprache === "de" ? "de" : "en" };
+  cfg = { db: cfg.db || "", group: cfg.group || "", me: cfg.me || "", pwHash: cfg.pwHash || "", adminHash: cfg.adminHash || "", projekt: cfg.projekt || "", sprache: cfg.sprache === "de" ? "de" : "en" };
   if (q.get("db") && q.get("gruppe")) {
     cfg.db = normUrl(q.get("db")); cfg.group = normGroup(q.get("gruppe"));
     saveCfg();
@@ -588,7 +596,7 @@ function connect() {
   setLive("wait", "Verbinde ...");
   // Letzten Stand sofort zeigen (auch ohne Netz); die Datenbank löst ihn gleich ab
   const saved = loadOffline();
-  if (saved) { tree = saved; taskCache = null; render(); }
+  if (saved) { tree = saved; taskCache = null; haveData = true; render(); showJoinOrApp(); }
   // Firebase schickt bei jeder Änderung sofort ein Ereignis (Server-Sent Events).
   source = new EventSource(base() + ".json");
   source.addEventListener("put", e => { const m = JSON.parse(e.data); setAt(m.path, m.data, false); live(); });
@@ -600,7 +608,7 @@ function connect() {
     if (!navigator.onLine && Object.keys(tree).length) banner("Offline: Du siehst den letzten gespeicherten Stand. Ändern geht erst wieder mit Internet.");
   };
 }
-function live() { setLive("on", "Live verbunden"); banner(""); render(); saveOffline(); }
+function live() { haveData = true; setLive("on", "Live verbunden"); banner(""); render(); showJoinOrApp(); saveOffline(); }
 // Letzter Stand der Gruppe im Browser, damit die App auch offline etwas zeigt
 const offlineKey = () => "bautrupp-stand:" + cfg.db + "|" + cfg.group;
 function loadOffline() {
@@ -616,10 +624,38 @@ function saveOffline() {
   }, 2000);
 }
 // Erst den Minecraft-Namen, dann die Aufgaben.
+// Angemeldet ist, wer seinen Namen und das passende Passwort hat. Solange noch keine Daten da sind,
+// gilt die gespeicherte Anmeldung (sonst blitzt beim Start kurz die Anmeldung auf).
+let haveData = false;
+const playerKey = name => Object.keys(tree.spieler || {}).find(n => same(n, name)) || "";
+const playerPw = name => { const sp = (tree.spieler || {})[playerKey(name)]; return sp && sp.pw && sp.pw.hash ? sp.pw : null; };
+function signedIn() {
+  if (!me() || !cfg.pwHash) return false;
+  if (!haveData) return true;
+  const pw = playerPw(me());
+  return !!pw && pw.hash === cfg.pwHash;
+}
 function showJoinOrApp() {
-  const ready = !!(cfg.db && cfg.group);
-  $("join").hidden = !ready || !!me();
-  $("app").hidden = !ready || !me();
+  const ready = !!(cfg.db && cfg.group), ok = ready && signedIn();
+  const wasJoin = !$("join").hidden;
+  $("join").hidden = !ready || ok;
+  $("app").hidden = !ok;
+  if (ready && !ok) {
+    if (!wasJoin && me() && !$("jName").value) $("jName").value = me();
+    joinMode();
+  }
+}
+// Anmelde-Seite: bekannter Name mit Passwort = Passwort eingeben, sonst Passwort festlegen
+function joinMode() {
+  const name = $("jName").value.trim(), pw = name ? playerPw(name) : null, known = !!playerKey(name);
+  const create = !!name && !pw;
+  $("jPw2Label").hidden = !create;
+  $("jPwText").textContent = create ? "Passwort festlegen (mindestens 4 Zeichen)" : "Passwort";
+  $("jPw").autocomplete = create ? "new-password" : "current-password";
+  $("jPwHint").textContent = !name ? "" : pw ? `Willkommen zurück, ${playerKey(name)}! Gib dein Passwort ein.`
+    : known ? `${playerKey(name)} hat noch kein Passwort für die Webseite. Leg jetzt eins fest – danach kann sich niemand sonst als ${playerKey(name)} anmelden.`
+    : "Neu hier: Leg ein Passwort fest. Damit kann sich niemand sonst unter deinem Namen anmelden.";
+  $("jGo").textContent = create ? "Passwort festlegen und los" : "Anmelden";
 }
 function banner(text) { $("banner").hidden = !text; $("banner").textContent = text; }
 
@@ -1172,8 +1208,9 @@ function renderAll() {
     const mine = T.filter(t => hasPerson(t, p));
     const open = mine.filter(t => t.status !== "fertig").length;
     const sp = (tree.spieler || {})[key(p)];
-    const seen = sp && sp.zuletzt ? "mit Mod" : "ohne Mod";
+    const seen = (sp && sp.zuletzt ? "mit Mod" : "ohne Mod") + (sp && sp.pw ? " · Passwort ✓" : "");
     return `<div class="member">${headHtml(p)}<div class="info"><div class="nm">${esc(p)}</div><div class="st">${open} offen · ${mine.length - open} fertig · ${seen}</div></div>
+      ${sp && sp.pw && hasAdmin() && isAdmin() ? `<button class="ghost" data-act="resetPw" data-who="${esc(key(p))}" title="Wenn jemand sein Passwort vergessen hat: danach legt er beim nächsten Öffnen ein neues fest">Passwort zurücksetzen</button>` : ""}
       ${sp && isAdmin() ? `<button class="ghost danger" data-act="del" data-path="/spieler/${esc(key(p))}">Entfernen</button>` : ""}</div>`;
   }).join("") : `<div class="empty">Noch niemand im Team.</div>`;
 }
@@ -1428,7 +1465,7 @@ function renderAdmin() {
   $("adminMain").textContent = !hasAdmin() ? "Passwort festlegen" : admin ? "Passwort ändern" : "Als Admin anmelden";
   $("adminLogout").hidden = !admin;
   $("groupTitle").textContent = "Gruppe " + cfg.group + (admin ? " · Admin" : "");
-  if (document.activeElement !== $("meName")) $("meName").value = me();
+  $("meName").textContent = me();
   $("meLang").value = cfg.sprache;
   const known = Object.keys(tree.spieler || {}).sort((a, b) => a.localeCompare(b));
   $("jKnown").hidden = !known.length;
@@ -1508,6 +1545,9 @@ document.addEventListener("click", async e => {
     case "join": { const t = (tree.aufgaben || {})[id] || {}; setPeople(id, [...people(t), me()]); break; }
     case "unassign": { const t = (tree.aufgaben || {})[id] || {}; setPeople(id, people(t).filter(p => !same(p, b.dataset.who))); break; }
     case "closeDrawer": closeDrawer(); break;
+    case "resetPw": confirmDel(b, async () => {
+      if (await write("PATCH", "/spieler/" + b.dataset.who, { pw: null })) toast(`Passwort von ${b.dataset.who} zurückgesetzt. Beim nächsten Öffnen legt er ein neues fest.`);
+    }); break;
     case "toggle": if (openCards.has(id)) openCards.delete(id); else openCards.add(id); render(); break;
     case "delStep": confirmDel(b, () => write("DELETE", `/aufgaben/${id}/schritte/${b.dataset.step}`)); break;
     case "delComment": confirmDel(b, () => write("DELETE", `/aufgaben/${id}/kommentare/${b.dataset.comment}`)); break;
@@ -2030,22 +2070,48 @@ $("disconnect").onclick = () => {
 };
 
 // Name merken und im Team eintragen (vorhandene Einträge der Mod bleiben erhalten).
-async function setMe(name) {
+// Anmelden: Passwort prüfen, oder (neuer Name / noch ohne Passwort) eins festlegen.
+// Gespeichert wird nur ein Prüfwert (SHA-256 mit Salz), nie das Passwort selbst.
+const newSalt = () => [...crypto.getRandomValues(new Uint8Array(8))].map(b => b.toString(16).padStart(2, "0")).join("");
+async function signIn(name, pass, pass2) {
   name = name.trim();
   if (!/^[A-Za-z0-9_]{3,16}$/.test(name)) { toast("Minecraft-Namen haben 3 bis 16 Zeichen: Buchstaben, Zahlen und _."); return false; }
-  const existing = Object.keys(tree.spieler || {}).find(n => same(n, name));
-  cfg.me = existing || name; saveCfg();
-  await write("PATCH", "/spieler/" + key(cfg.me), { web: true });
+  const k = playerKey(name) || name, pw = playerPw(name);
+  if (pw) {
+    const hash = await sha256(pw.salt + ":" + pass);
+    if (hash !== pw.hash) { toast("Falsches Passwort."); return false; }
+    cfg.me = k; cfg.pwHash = hash; saveCfg();
+    await write("PATCH", "/spieler/" + key(k), { web: true });
+  } else {
+    if (pass.length < 4) { toast("Das Passwort muss mindestens 4 Zeichen haben."); return false; }
+    if (pass !== pass2) { toast("Die beiden Passwörter sind nicht gleich."); return false; }
+    const salt = newSalt(), hash = await sha256(salt + ":" + pass);
+    if (!(await write("PATCH", "/spieler/" + key(k), { web: true, pw: { salt, hash } }))) return false;
+    cfg.me = k; cfg.pwHash = hash; saveCfg();
+    setAt("/spieler/" + key(k) + "/pw", { salt, hash }, false);
+  }
+  $("jPw").value = $("jPw2").value = "";
   showJoinOrApp(); render();
   return true;
 }
-$("fJoin").onsubmit = async e => { e.preventDefault(); if (await setMe($("jName").value)) toast("Hallo " + cfg.me + "!"); };
-$("jChips").onclick = e => { const b = e.target.closest("[data-pick]"); if (b) { $("jName").value = b.dataset.pick; $("jName").focus(); } };
+$("fJoin").onsubmit = async e => { e.preventDefault(); if (await signIn($("jName").value, $("jPw").value, $("jPw2").value)) toast("Hallo " + cfg.me + "!"); };
+$("jName").oninput = () => joinMode();
+$("jChips").onclick = e => { const b = e.target.closest("[data-pick]"); if (b) { $("jName").value = b.dataset.pick; joinMode(); $("jPw").focus(); } };
 $("meLang").onchange = () => { cfg.sprache = $("meLang").value; saveCfg(); fillItemList(); render(); };
 $("fMe").onsubmit = async e => {
   e.preventDefault();
-  if (await setMe($("meName").value)) toast("Gespeichert");
+  const pw = playerPw(me()), old = $("mePwOld").value, neu = $("mePwNew").value;
+  if (!pw || (await sha256(pw.salt + ":" + old)) !== pw.hash) { toast("Das jetzige Passwort stimmt nicht."); return; }
+  if (neu.length < 4) { toast("Das neue Passwort muss mindestens 4 Zeichen haben."); return; }
+  if (neu !== $("mePwNew2").value) { toast("Die beiden neuen Passwörter sind nicht gleich."); return; }
+  const salt = newSalt(), hash = await sha256(salt + ":" + neu);
+  if (await write("PATCH", "/spieler/" + key(playerKey(me())), { pw: { salt, hash } })) {
+    cfg.pwHash = hash; saveCfg();
+    ["mePwOld", "mePwNew", "mePwNew2"].forEach(i => $(i).value = "");
+    toast("Passwort geändert");
+  }
 };
+$("meLogout").onclick = () => { $("jName").value = ""; cfg.me = ""; cfg.pwHash = ""; saveCfg(); showJoinOrApp(); window.scrollTo(0, 0); };
 $("fAdmin").onsubmit = async e => {
   e.preventDefault();
   const pw = $("adminPw").value;
