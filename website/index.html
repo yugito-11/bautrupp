@@ -237,7 +237,7 @@ nav .more { display: none; }
 .moremenu { position: fixed; left: auto; top: auto; width: 200px; }
 
 @media (max-width: 700px) {
-  .wrap { padding-top: 12px; padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .wrap { padding-top: 12px; padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
   header { gap: 10px; margin-bottom: 12px; }
   h1 { font-size: 22px; }
   #groupTitle { font-size: 22px; }
@@ -245,13 +245,15 @@ nav .more { display: none; }
   .xp { flex: 1 1 100%; min-width: 0; }
   .projbar { margin-bottom: 10px; }
   #projSel { flex: 1 1 auto; min-width: 0; }
-  nav { position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; margin: 0; border: 0; border-top: 2px solid var(--line); background: var(--panel); padding: 0 0 env(safe-area-inset-bottom); gap: 0; overflow: visible; }
-  nav button { flex: 1 1 0; font-size: 13px; padding: 9px 2px 11px; border-bottom: 0; border-top: 3px solid transparent; margin: 0; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
-  nav button[aria-selected="true"], nav .more.on { border-top-color: var(--grass); color: var(--fg); }
+  /* Leiste oben: unten rechts blendet Netlify im kostenlosen Plan "Powered by Netlify" ein */
+  nav { position: sticky; top: 0; z-index: 35; margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 12px; border: 0; border-bottom: 2px solid var(--line); background: var(--panel); padding: env(safe-area-inset-top) 0 0; gap: 0; overflow: visible; }
+  nav button { flex: 1 1 0; font-size: 13px; padding: 9px 2px 8px; border-bottom: 3px solid transparent; margin: 0 0 -2px; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 0; }
+  nav button[aria-selected="true"], nav .more.on { border-bottom-color: var(--grass); color: var(--fg); }
   nav button .n { margin: 0; font-size: 11px; min-height: 1em; }
   nav button.extra { display: none; }
-  nav .more { display: flex; font: 500 13px var(--display); background: none; border: 0; color: var(--muted); cursor: pointer; justify-content: center; }
-  .moremenu { right: 8px; bottom: calc(66px + env(safe-area-inset-bottom)); }
+  nav .more { display: flex; font: 500 13px var(--display); background: none; border: 0; border-bottom: 3px solid transparent; color: var(--muted); cursor: pointer; justify-content: center; }
+  nav .moremenu { position: absolute; top: 100%; right: 8px; left: auto; bottom: auto; }
+  nav .moremenu > button { flex: none; display: block; font: 15px var(--body); color: var(--fg); padding: 10px 12px; border: 0; margin: 0; text-align: left; }
   .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); margin-bottom: 10px; }
   .seg button { background: var(--panel); border: 0; border-right: 1px solid var(--line); padding: 10px 4px; font-weight: 700; color: var(--muted); cursor: pointer; }
   .seg button:last-child { border-right: 0; }
@@ -268,8 +270,8 @@ nav .more { display: none; }
   .xp { flex-direction: row; flex-wrap: wrap; gap: 2px 18px; }
   .xp .xpbar { display: none; }
   .xp-row { gap: 8px; }
-  .drawer { width: 100%; border-left: 0; padding: 0 14px calc(24px + env(safe-area-inset-bottom)); }
-  #toast { bottom: calc(80px + env(safe-area-inset-bottom)); }
+  .drawer { width: 100%; border-left: 0; padding: 0 14px calc(110px + env(safe-area-inset-bottom)); }
+  #toast { bottom: calc(100px + env(safe-area-inset-bottom)); }
   .tablewrap table, .tablewrap tbody, .tablewrap tr, .tablewrap td { display: block; width: 100%; }
   .tablewrap thead { display: none; }
   .tablewrap tr { border-bottom: 2px solid var(--line); padding: 8px 0; }
@@ -379,12 +381,12 @@ nav .more { display: none; }
     <button role="tab" data-tab="verlauf" class="extra">Verlauf</button>
     <button role="tab" data-tab="einstellungen" class="extra">Einstellungen</button>
     <button type="button" class="more" id="moreBtn" aria-expanded="false">Mehr</button>
+    <div class="menu moremenu" id="moreMenu" hidden>
+      <button type="button" data-goto="team">Team</button>
+      <button type="button" data-goto="verlauf">Verlauf</button>
+      <button type="button" data-goto="einstellungen">Einstellungen</button>
+    </div>
   </nav>
-  <div class="menu moremenu" id="moreMenu" hidden>
-    <button type="button" data-goto="team">Team</button>
-    <button type="button" data-goto="verlauf">Verlauf</button>
-    <button type="button" data-goto="einstellungen">Einstellungen</button>
-  </div>
 
   <section id="tab-aufgaben">
     <div class="toolbar">
