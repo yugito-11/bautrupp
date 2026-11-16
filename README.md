@@ -7,7 +7,7 @@ gemeinsame Firebase Realtime Database teilen:
 | Teil | Ordner | Was |
 |---|---|---|
 | Mod | [`mod/`](mod) | Client-Mod für **Minecraft 26.3 mit Fabric** (nur bei denen nötig, die mitmachen) |
-| Website | [`website/`](website) | Eine einzelne `index.html` – z. B. bei Netlify per Drag & Drop hosten |
+| Website | [`website/`](website) | `index.html` plus App-Dateien – läuft auf https://bautrupp.netlify.app und lässt sich am Handy als App installieren |
 
 ## Mod herunterladen
 

@@ -1,0 +1,17 @@
+{
+  "name": "Bautrupp",
+  "short_name": "Bautrupp",
+  "description": "Aufgaben, Material und Koordinaten für eure Minecraft-Gruppe",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1b1d1f",
+  "theme_color": "#1b1d1f",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

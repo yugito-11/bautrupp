@@ -4,6 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bautrupp</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#eef0ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1b1d1f" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bautrupp">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
 <style>
@@ -337,9 +346,11 @@ tr.auto td { background: color-mix(in srgb, var(--soft) 50%, transparent); }
     </div>
     <div class="addform setupform">
       <h2>Über Bautrupp</h2>
-      <p class="note">Website-Version 2.14. Die Mod für Minecraft 26.3 (Fabric) gibt es hier:
+      <p class="note">Website-Version 2.15. Die Mod für Minecraft 26.3 (Fabric) gibt es hier:
         <a href="https://github.com/yugito-11/bautrupp/releases/latest" target="_blank" rel="noopener">Bautrupp-Mod herunterladen</a>.
         Anleitung und Quellcode: <a href="https://github.com/yugito-11/bautrupp" target="_blank" rel="noopener">github.com/yugito-11/bautrupp</a></p>
+      <div class="acts" id="installBox" hidden><button class="btn" type="button" id="installBtn">Als App installieren</button></div>
+      <p class="note" id="installHint" hidden></p>
     </div>
     <form class="addform setupform" id="fMe">
       <h2>Du</h2>
@@ -440,14 +451,35 @@ function connect() {
   $("curDb").textContent = cfg.db;
   $("curGroup").textContent = cfg.group;
   setLive("wait", "Verbinde ...");
+  // Letzten Stand sofort zeigen (auch ohne Netz); die Datenbank löst ihn gleich ab
+  const saved = loadOffline();
+  if (saved) { tree = saved; taskCache = null; render(); }
   // Firebase schickt bei jeder Änderung sofort ein Ereignis (Server-Sent Events).
   source = new EventSource(base() + ".json");
   source.addEventListener("put", e => { const m = JSON.parse(e.data); setAt(m.path, m.data, false); live(); });
   source.addEventListener("patch", e => { const m = JSON.parse(e.data); setAt(m.path, m.data, true); live(); });
   source.addEventListener("cancel", () => { setLive("err", "Kein Zugriff"); banner("Die Datenbank verweigert den Zugriff. Prüft die Regeln in Firebase (siehe Anleitung, Schritt 2.4)."); });
-  source.onerror = () => { if (source.readyState !== EventSource.OPEN) setLive("err", "Keine Verbindung, versuche es weiter ..."); };
+  source.onerror = () => {
+    if (source.readyState === EventSource.OPEN) return;
+    setLive("err", "Keine Verbindung, versuche es weiter ...");
+    if (!navigator.onLine && Object.keys(tree).length) banner("Offline: Du siehst den letzten gespeicherten Stand. Ändern geht erst wieder mit Internet.");
+  };
 }
-function live() { setLive("on", "Live verbunden"); banner(""); render(); }
+function live() { setLive("on", "Live verbunden"); banner(""); render(); saveOffline(); }
+// Letzter Stand der Gruppe im Browser, damit die App auch offline etwas zeigt
+const offlineKey = () => "bautrupp-stand:" + cfg.db + "|" + cfg.group;
+function loadOffline() {
+  try { const t = JSON.parse(localStorage.getItem(offlineKey()) || "null"); return t && typeof t === "object" ? t : null; } catch { return null; }
+}
+function saveOffline() {
+  clearTimeout(saveOffline.t);
+  saveOffline.t = setTimeout(() => {
+    try {
+      const json = JSON.stringify(tree);
+      if (json.length < 3_000_000) localStorage.setItem(offlineKey(), json);
+    } catch {}
+  }, 2000);
+}
 // Erst den Minecraft-Namen, dann die Aufgaben.
 function showJoinOrApp() {
   const ready = !!(cfg.db && cfg.group);
@@ -1819,6 +1851,24 @@ $("adminLogout").onclick = () => { cfg.adminHash = ""; saveCfg(); render(); toas
 function fillItemList() {
   $("itemList").innerHTML = Object.values(ITEMS).map(([en, de]) => cfg.sprache === "de"
     ? `<option value="${esc(de)}" label="${esc(en)}"></option>` : `<option value="${esc(en)}" label="${esc(de)}"></option>`).join("");
+}
+
+// Als App: Service Worker anmelden und "Installieren" anbieten
+if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+let installPrompt = null;
+const standalone = () => matchMedia("(display-mode: standalone)").matches || navigator.standalone === true;
+addEventListener("beforeinstallprompt", e => { e.preventDefault(); installPrompt = e; $("installBox").hidden = false; $("installHint").hidden = true; });
+addEventListener("appinstalled", () => { $("installBox").hidden = true; toast("Bautrupp ist jetzt als App installiert"); });
+$("installBtn").onclick = async () => {
+  if (!installPrompt) return;
+  installPrompt.prompt();
+  await installPrompt.userChoice.catch(() => {});
+  installPrompt = null; $("installBox").hidden = true;
+};
+if (standalone()) $("installHint").hidden = true;
+else if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
+  $("installHint").hidden = false;
+  $("installHint").textContent = "Als App aufs iPhone: in Safari unten auf „Teilen“ tippen und „Zum Home-Bildschirm“ wählen.";
 }
 
 loadCfg();
